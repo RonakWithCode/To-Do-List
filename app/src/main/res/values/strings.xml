@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">To-Do-list</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="testArray">
+        <item>Tomorrow</item>
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>Last 7Days</item>
+        <item>Custom</item>
+    </string-array>
+    <string-array name="filter">
+        <item>Complete</item>
+        <item>Non-Complete</item>
+        <item>Short by A-to-Z</item>
+        <item>Short by Z-to-A</item>
+    </string-array>
+
+</resources>

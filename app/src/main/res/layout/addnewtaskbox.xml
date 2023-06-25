@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/TextviewForTask"
+                android:textAlignment="center"
+                android:textColor="@color/TaskTextColor"
+                android:textSize="@dimen/_25ssp"
+                android:text="Add new Task here"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:layout_below="@+id/TextviewForTask"
+                android:layout_width="match_parent"
+                android:hint="Input Here"
+                android:layout_margin="@dimen/_15sdp"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/InputForTask"
+                android:inputType="textNoSuggestions" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/List_Sub_Task"
+                android:layout_below="@id/InputForTask"
+                android:layout_width="match_parent"
+                android:minHeight="@dimen/_170sdp"
+                android:layout_height="@dimen/_170sdp"/>
+
+            <EditText
+                android:layout_below="@+id/List_Sub_Task"
+                android:layout_width="match_parent"
+                android:hint="Note"
+                android:visibility="gone"
+                android:layout_margin="@dimen/_15sdp"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/InputForNote"
+                android:inputType="textNoSuggestions" />
+
+            <LinearLayout
+                android:id="@+id/linear_Btu"
+                android:layout_below="@id/InputForNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/Category_Spinner_Add_Task"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/calendarBtu"
+                    android:src="@drawable/ic_baseline_calendar_month_24blue"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/_9sdp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:id="@+id/add_sub_task"
+                    android:text="add Sub Task"
+                    android:shadowColor="@color/TaskTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:id="@+id/add_Note_task"
+                    android:text="add Note"
+                    android:shadowColor="@color/TaskTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/linear_Btu"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Cancel"
+                    android:id="@+id/cancel_task"
+                    android:textSize="@dimen/_20ssp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:textColor="@color/newTaskCancelTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:text="Save"
+                    android:id="@+id/save_task"
+                    android:textSize="@dimen/_20ssp"
+                    android:textColor="@color/newTaskSaveTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</LinearLayout>

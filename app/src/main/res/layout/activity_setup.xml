@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/setupscreenbacgroundcolor"
+    tools:context=".SetupActivity.SetupActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:text="Welcome To To-Do-List"
+        android:textColor="@color/SetUpText"
+        android:textSize="@dimen/_28ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_45sdp"
+        android:src="@drawable/ic_baseline_task_alt_24_tealish_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <TextView
+        android:id="@+id/MainText1"
+        style="@style/SetUpScreenMainText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Task or Syne"
+        app:layout_constraintStart_toEndOf="@+id/imageView1"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <TextView
+        android:id="@+id/subText1"
+        style="@style/SetUpScreenSubText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Easily Syne in \ndatabase"
+        app:layout_constraintStart_toEndOf="@+id/imageView1"
+        app:layout_constraintTop_toBottomOf="@+id/MainText1" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        style="@style/SetUpScreenSubImages"
+        android:src="@drawable/ic_baseline_access_alarms_24"
+        app:layout_constraintTop_toBottomOf="@+id/imageView1"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/MainText2"
+        style="@style/SetUpScreenText"
+        android:text="Alarm Alert"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView1" />
+
+    <TextView
+        android:id="@+id/subText2"
+        style="@style/SetUpScreenSubText"
+        android:text="Set Alarm Alert reminder, and it help to never miss important things"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/MainText2" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        style="@style/SetUpScreenSubImages"
+        android:src="@drawable/ic_baseline_dashboard_customize_24"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/MainText3"
+        style="@style/SetUpScreenText"
+        android:text="Custom Themes"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/subText2" />
+
+    <TextView
+        android:id="@+id/subText3"
+        style="@style/SetUpScreenSubText"
+        android:text="Set the theme you like"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/MainText3" />
+
+
+    <CheckBox
+        android:id="@+id/checkboxTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="I agree terms and conditions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/Continue"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/_12sdp"
+        android:layout_height="wrap_content"
+        android:text="CONTINUE  >>>"
+        android:textSize="@dimen/_30sdp"
+        style="@style/SetUpScreenButton"
+        android:background="@drawable/buttonroundedcorners"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkboxTerms" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textColor="@color/newCategoryBlackTextColor"
+        android:textSize="@dimen/_19ssp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="Create new Category"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:layout_below="@+id/text"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:maxLength="20"
+        android:hint="Enter category name"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:id="@+id/inputCategoryName"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/inputCategoryName"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="CANCEL"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_25ssp"
+            android:layout_width="wrap_content"
+            android:textColor="@color/newCategoryCancelTextColor"
+            android:id="@+id/CANCEL"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="SAVE"
+            android:textColor="@color/newCategorySaveTextColor"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:id="@+id/save"
+            android:textSize="@dimen/_25ssp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</RelativeLayout>
