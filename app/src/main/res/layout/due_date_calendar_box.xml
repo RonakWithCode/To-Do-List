@@ -1,7 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text_due_textView"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/Due_Date_Calender_box_text_View"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:text="Set Due Date "
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_height="wrap_content"/>
+
+    <CalendarView
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_below="@id/text_due_textView"
+        android:id="@+id/calendarView"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_below="@id/calendarView"
+        android:layout_marginBottom="@dimen/_27sdp"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:id="@+id/cancel"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="@color/Due_Date_Calender_box_CancelTextColor"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="@dimen/_15ssp"
+            android:text="Save"
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:textColor="@color/Due_Date_Calender_box_SaveTextColor"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -6,6 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Entity(tableName = "Task_Model")
 
@@ -24,9 +25,12 @@ public class TaskModel {
     ArrayList<Boolean> sub_check;
     @ColumnInfo(name = "sub_Task")
     ArrayList<String>  sub_Task;
-
+    @ColumnInfo(name = "date")
+    Date Date;
+    @ColumnInfo(name = "date")
+    private boolean Pin;
     public TaskModel(){}
-    public TaskModel(int id, String task, String notes, String category, Boolean taskCheck, ArrayList<String> sub_Task, ArrayList<Boolean>  sub_check) {
+    public TaskModel(int id, String task, String notes, String category, Boolean taskCheck, ArrayList<String> sub_Task, ArrayList<Boolean> sub_check,Date date,Boolean pin) {
         this.id = id;
         this.task = task;
         this.notes = notes;
@@ -34,16 +38,38 @@ public class TaskModel {
         TaskCheck = taskCheck;
         this.sub_Task = sub_Task;
         this.sub_check = sub_check;
+        this.Date = date;
+        this.Pin = pin;
     }
     @Ignore
-    public TaskModel(String task, String notes, String category, Boolean taskCheck, ArrayList<String> sub_Task, ArrayList<Boolean>  sub_check) {
+    public TaskModel(String task, String notes, String category, Boolean taskCheck, ArrayList<String> sub_Task, ArrayList<Boolean> sub_check,Date date,Boolean pin) {
         this.task = task;
         this.notes = notes;
         Category = category;
         TaskCheck = taskCheck;
         this.sub_Task = sub_Task;
         this.sub_check = sub_check;
+        this.Date = date;
+        this.Pin = pin;
+
     }
+
+    public boolean isPin() {
+        return Pin;
+    }
+
+    public void setPin(boolean pin) {
+        Pin = pin;
+    }
+
+    public Date getDate() {
+        return Date;
+    }
+
+    public void setDate(Date date) {
+        Date = date;
+    }
+
     public ArrayList<String> getSub_Task() {
         return sub_Task;
     }

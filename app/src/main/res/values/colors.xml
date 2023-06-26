@@ -40,7 +40,13 @@
     <color name="newTaskSaveTextColor">#94abdc</color>
     <color name="newTaskCancelTextColor">#ccdcf6</color>
 
-    <!--    <color name=""-->
     <!--    Create a TaskDetails Screen -->
     <color name="TaskDetails_Add_TextView">#a6badd</color>
+
+
+    <!-- Create a Due Date calendar Box -->
+    <color name="Due_Date_Calender_box_text_View">#00010a</color>
+    <color name="Due_Date_Calender_box_SaveTextColor">#94abdc</color>
+    <color name="Due_Date_Calender_box_CancelTextColor">#ccdcf6</color>
+
 </resources>

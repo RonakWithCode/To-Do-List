@@ -24,14 +24,16 @@ import com.crazyostudio.to_do_list.DAO.TaskDatabaseHelper;
 import com.crazyostudio.to_do_list.Model.CategoryModel;
 import com.crazyostudio.to_do_list.Model.TaskModel;
 import com.crazyostudio.to_do_list.Model.Task_Sub_Model;
+import com.crazyostudio.to_do_list.Model.onCheck;
 import com.crazyostudio.to_do_list.R;
 import com.crazyostudio.to_do_list.databinding.AddcategorymenuboxBinding;
 import com.crazyostudio.to_do_list.databinding.AddnewtaskboxBinding;
 import com.crazyostudio.to_do_list.databinding.FragmentTaskBinding;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class TaskFragment extends Fragment {
+public class TaskFragment extends Fragment implements onCheck {
     FragmentTaskBinding binding;
     ArrayList<String> CategorySpinnerDate;
     ArrayAdapter<String> CategorySpinnerAdapter;
@@ -107,7 +109,7 @@ public class TaskFragment extends Fragment {
                 sub_Task_.add(task_sub_models.get(i).getSub_task());
                 sub_Check_.add(task_sub_models.get(i).isTrue());
             }
-            TaskDatabaseHelper.taskModelDAO().insertTaskModel(new TaskModel(taskBinding.InputForTask.getText().toString(),taskBinding.InputForNote.getText().toString(),taskBinding.CategorySpinnerAddTask.getSelectedItem().toString(),false,sub_Task_,sub_Check_));
+            TaskDatabaseHelper.taskModelDAO().insertTaskModel(new TaskModel(taskBinding.InputForTask.getText().toString(),taskBinding.InputForNote.getText().toString(),taskBinding.CategorySpinnerAddTask.getSelectedItem().toString(),false,sub_Task_,sub_Check_,new Date(),false));
             taskAdapter.notifyDataSetChanged();
             GetTask();
             dialog.dismiss();
@@ -279,7 +281,7 @@ public class TaskFragment extends Fragment {
 //        binding.TaskList.set
         TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
         ArrayList<TaskModel> taskModels = new ArrayList<>();
-        taskAdapter = new TaskAdapter(taskModels, getContext());
+        taskAdapter = new TaskAdapter(taskModels, this  ,getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.TaskList.setLayoutManager(layoutManager);
@@ -294,4 +296,16 @@ public class TaskFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public void onBtnClickPin(TaskModel taskModel) {
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onBtnClickDelete(TaskModel taskModel) {
+        TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
+        taskDatabaseHelper.taskModelDAO().deleteTaskModel(taskModel);
+        taskAdapter.notifyDataSetChanged();
+    }
 }

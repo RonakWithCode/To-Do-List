@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.crazyostudio.to_do_list.Activity.TaskDetailsActivity;
 import com.crazyostudio.to_do_list.Model.TaskModel;
+import com.crazyostudio.to_do_list.Model.onCheck;
 import com.crazyostudio.to_do_list.R;
 import com.crazyostudio.to_do_list.databinding.TaskLayoutBinding;
 
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterViewHolder>{
     ArrayList<TaskModel> taskModels;
+    onCheck onCheck;
     Context context;
 
-    public TaskAdapter(ArrayList<TaskModel> list, Context context) {
+    public TaskAdapter(ArrayList<TaskModel> list,onCheck OnCheck,  Context context) {
         this.taskModels = list;
+        this.onCheck = OnCheck;
         this.context = context;
     }
 
@@ -37,6 +40,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         TaskModel task = taskModels.get(position);
         holder.taskLayoutBinding.TaskCheckbox.setText(task.getTask());
         holder.taskLayoutBinding.TaskCheckbox.setChecked(task.getTaskCheck());
+        holder.taskLayoutBinding.delete.setOnClickListener(view -> {
+            onCheck.onBtnClickDelete(task);
+        });
+        holder.taskLayoutBinding.pin.setOnClickListener(view -> {
+            onCheck.onBtnClickPin(task);
+        });
+
+
         holder.taskLayoutBinding.TaskLayout.setOnClickListener(view->{
             Intent intent = new Intent(context, TaskDetailsActivity.class);
             intent.putExtra("index",task.getId()+"");
