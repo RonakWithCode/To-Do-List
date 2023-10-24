@@ -22,25 +22,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         ReplaceFragment(new TaskFragment());
 
-        binding.bottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public boolean onItemSelect(int i) {
-                switch (i){
-                    case 0:
-                        ReplaceFragment(new TaskFragment());
-                        break;
-                    case 1:
-                        ReplaceFragment(new CalendarFragment());
+        binding.bottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
+            switch (i){
+                case 0:
+                    ReplaceFragment(new TaskFragment());
+                    break;
+                case 1:
+                    ReplaceFragment(new CalendarFragment());
 
-                        break;
-                    case 2:
-                        ReplaceFragment(new MoreFragment());
-                        break;
-                }
-                return true;
+                    break;
+                case 2:
+                    ReplaceFragment(new MoreFragment());
+                    break;
             }
-
-
+            return true;
         });
     }
     private void ReplaceFragment(Fragment fragment) {

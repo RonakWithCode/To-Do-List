@@ -41,6 +41,7 @@
         </HorizontalScrollView>
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/layout"
         android:layout_width="match_parent"
@@ -48,8 +49,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_height="match_parent"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_marginBottom="@dimen/_22sdp"
         android:layout_marginEnd="@dimen/_15sdp"

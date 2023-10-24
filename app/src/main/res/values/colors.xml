@@ -18,6 +18,22 @@
     <color name="iconTintActive">#ffffff</color>
 
 
+    <!--Random Colors    -->
+    <color name="PintButtonBotten">#900091</color>
+    <color name="PlanText">#CACACA</color>
+    <color name="Link">#027ebc</color>
+    <color name="PintButtonStart">#D200FF</color>
+    <color name="PintButtonEnd">#E87FFF</color>
+    <color name="colorAccent">#E95345</color>
+    <color name="trueBlack">#000000</color>
+    <color name="otp_editext_color">#DAE2DFDF</color>
+
+    <!-- Some basic colors -->
+    <color name="MainQuntityColor">#E6E6E6</color>
+    <color name="MainBackgroundColor">#ffff</color>
+    <color name="MainTextColor">#000000</color>
+    <color name="MainHintColor">#757575</color>
+    <color name="FixBlack">#000000</color>
 
     <!-- SetUp Screen -->
     <color name="SetUpstartColor">#d7e3fb</color>
@@ -40,7 +56,18 @@
     <color name="newTaskSaveTextColor">#94abdc</color>
     <color name="newTaskCancelTextColor">#ccdcf6</color>
 
-    <!--    <color name=""-->
     <!--    Create a TaskDetails Screen -->
     <color name="TaskDetails_Add_TextView">#a6badd</color>
+
+
+    <!-- Create a Due Date calendar Box -->
+    <color name="Due_Date_Calender_box_text_View">#00010a</color>
+    <color name="Due_Date_Calender_box_SaveTextColor">#94abdc</color>
+    <color name="Due_Date_Calender_box_CancelTextColor">#ccdcf6</color>
+
+    <!-- Create a Time Or Reminder Box -->
+    <color name="time_or_reminder_box_text_View">#00010a</color>
+    <color name="time_or_reminder_box_SaveTextColor">#94abdc</color>
+    <color name="time_or_reminder_box_CancelTextColor">#ccdcf6</color>
+
 </resources>

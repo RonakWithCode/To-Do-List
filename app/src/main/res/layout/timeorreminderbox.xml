@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="Set Time &amp; Reminder"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:textColor="@color/time_or_reminder_box_text_View"
+        android:layout_width="wrap_content"
+        android:id="@+id/textView_Set"
+        android:layout_height="wrap_content"/>
+
+    <TimePicker
+        android:layout_below="@+id/textView_Set"
+        android:id="@+id/simpleTimePicker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="clock"/>
+
+    <RelativeLayout
+        android:layout_below="@id/simpleTimePicker"
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/_25sdp"
+            android:textColor="@color/TaskTextColor"
+            android:text="Reminder at "
+            tools:ignore="RtlSymmetry" />
+        <Spinner
+            android:id="@+id/spinnerReminderAt"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginEnd="@dimen/_15sdp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@id/RelativeLayout1"
+        android:id="@+id/RelativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/_25sdp"
+            android:textColor="@color/TaskTextColor"
+            android:text="Reminder Type "
+            tools:ignore="RtlSymmetry" />
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginEnd="@dimen/_15sdp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/RelativeLayout2"
+        android:id="@+id/RelativeLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:maxLines="1"
+            android:paddingEnd="@dimen/_25sdp"
+            android:textColor="@color/TaskTextColor"
+            android:text="Look Screen "
+            tools:ignore="RtlSymmetry" />
+        <Spinner
+            android:id="@+id/lookScreen_spinner"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:layout_marginEnd="@dimen/_15sdp"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_below="@id/RelativeLayout3"
+        android:layout_marginBottom="@dimen/_27sdp"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:id="@+id/cancel"
+            android:textSize="@dimen/_15ssp"
+            android:textColor="@color/Due_Date_Calender_box_CancelTextColor"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textSize="@dimen/_15ssp"
+            android:text="Save"
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:textColor="@color/Due_Date_Calender_box_SaveTextColor"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</RelativeLayout>

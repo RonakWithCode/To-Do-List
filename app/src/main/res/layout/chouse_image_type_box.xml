@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/view_text"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="Chouse"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:textSize="@dimen/_23ssp"
+        android:textColor="@color/MainTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:layout_below="@id/view_text"
+        android:layout_width="@dimen/_100sdp"
+        android:id="@+id/ChouseOne"
+        android:src="@drawable/choose_one_image"
+        android:layout_marginStart="@dimen/_35sdp"
+        android:layout_height="@dimen/_100sdp"/>
+    <ImageView
+        android:layout_toEndOf="@id/ChouseOne"
+        android:layout_below="@id/view_text"
+        android:layout_marginStart="@dimen/_25sdp"
+        android:layout_width="@dimen/_100sdp"
+        android:id="@+id/ChouseMultiple"
+        android:src="@drawable/multiple_image"
+        android:layout_height="@dimen/_100sdp"/>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:text="@string/action_cancel"
+        android:layout_below="@+id/ChouseMultiple"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/_20ssp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:textColor="@color/newTaskCancelTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

@@ -2,6 +2,28 @@
     <string name="app_name">To-Do-list</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="do_you_want_to_synchronize_your_to_do_list">Do you want to synchronize your To-do-list</string>
+
+
+    <string name="accept_terms_and_conditions">Accept Terms and Conditions</string>
+    <string name="read_more"><a href="https://crazy-studio-website.web.app/PrivacyPolicy.html">Read More</a></string>
+    <string name="icon">Icon</string>
+    <string name="otp">OTP</string>
+
+
+    <string name="otp_title">Please enter the 6 digit verification code</string>
+    <string name="otp_button_text">VERIFY</string>
+    <string name="resend_msg">Didn’t receive the OTP?</string>
+    <string name="resend_again_msg">Resend again</string>
+    <string name="change">Change</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="sent_to">Sent to</string>
+    <string name="create_account">Create Account</string>
+    <string name="name">Name</string>
+    <string name="e_mail">E-mail</string>
+    <string name="please_make_a_account_or_sign_up">Please make a account or Sign-Up</string>
+
+
     <string-array name="testArray">
         <item>Tomorrow</item>
         <item>Today</item>

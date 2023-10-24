@@ -2,6 +2,7 @@ package com.crazyostudio.to_do_list.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,45 +12,52 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.crazyostudio.to_do_list.Activity.AuthMangerActivity;
+import com.crazyostudio.to_do_list.Adapter.PinnedComparator;
 import com.crazyostudio.to_do_list.Adapter.TaskAdapter;
 import com.crazyostudio.to_do_list.Adapter.Task_Sub_Adapter;
+import com.crazyostudio.to_do_list.Classes.keys;
 import com.crazyostudio.to_do_list.DAO.CategoryDatabaseHelper;
 import com.crazyostudio.to_do_list.DAO.TaskDatabaseHelper;
 import com.crazyostudio.to_do_list.Model.CategoryModel;
 import com.crazyostudio.to_do_list.Model.TaskModel;
 import com.crazyostudio.to_do_list.Model.Task_Sub_Model;
+import com.crazyostudio.to_do_list.Model.onCheck;
 import com.crazyostudio.to_do_list.R;
 import com.crazyostudio.to_do_list.databinding.AddcategorymenuboxBinding;
 import com.crazyostudio.to_do_list.databinding.AddnewtaskboxBinding;
+import com.crazyostudio.to_do_list.databinding.FirstTimeSyncDataBoxBinding;
 import com.crazyostudio.to_do_list.databinding.FragmentTaskBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class TaskFragment extends Fragment {
+public class TaskFragment extends Fragment implements onCheck {
     FragmentTaskBinding binding;
     ArrayList<String> CategorySpinnerDate;
     ArrayAdapter<String> CategorySpinnerAdapter;
     TaskAdapter taskAdapter;
-    public TaskFragment(){}
 
+    public TaskFragment(){}
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTaskBinding.inflate(inflater,container,false);
-          // Load Task
+
+        // Load Task
         CategorySetData(); // Check if Category is Entity set CategoryData
         DateSpinner(); // Load Data Spinner
         CategorySpinner(); // Load Data Category
         FilterSpinner(); // Load Data Filter
-        binding.AddTaskFAB.setOnClickListener(v->{
-            ShowAddTaskDialog();
-        });
+        binding.AddTaskFAB.setOnClickListener(v-> ShowAddTaskDialog());
         return binding.getRoot();
     }
     @SuppressLint("NotifyDataSetChanged")
@@ -62,6 +70,7 @@ public class TaskFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(R.drawable.newcategoryboxbg);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.CategorySpinnerAnimation;
+
         ArrayList<Task_Sub_Model> task_sub_models = new ArrayList<>();
         Task_Sub_Adapter task_sub_adapter;
         task_sub_adapter = new Task_Sub_Adapter(task_sub_models,getContext());
@@ -95,9 +104,7 @@ public class TaskFragment extends Fragment {
             task_sub_models.add(new Task_Sub_Model("Sub Notes",false));
             task_sub_adapter.notifyDataSetChanged();
         });
-        taskBinding.addNoteTask.setOnClickListener(notes->{
-            taskBinding.InputForNote.setVisibility(View.VISIBLE);
-        });
+        taskBinding.addNoteTask.setOnClickListener(notes-> taskBinding.InputForNote.setVisibility(View.VISIBLE));
         taskBinding.cancelTask.setOnClickListener(cancel->dialog.dismiss());
         taskBinding.saveTask.setOnClickListener(cancel->{
             TaskDatabaseHelper TaskDatabaseHelper = com.crazyostudio.to_do_list.DAO.TaskDatabaseHelper.TasGetDB(getContext());
@@ -107,7 +114,7 @@ public class TaskFragment extends Fragment {
                 sub_Task_.add(task_sub_models.get(i).getSub_task());
                 sub_Check_.add(task_sub_models.get(i).isTrue());
             }
-            TaskDatabaseHelper.taskModelDAO().insertTaskModel(new TaskModel(taskBinding.InputForTask.getText().toString(),taskBinding.InputForNote.getText().toString(),taskBinding.CategorySpinnerAddTask.getSelectedItem().toString(),false,sub_Task_,sub_Check_));
+            TaskDatabaseHelper.taskModelDAO().insertTaskModel(new TaskModel(taskBinding.InputForTask.getText().toString(),taskBinding.InputForNote.getText().toString(),taskBinding.CategorySpinnerAddTask.getSelectedItem().toString(),false,sub_Task_,sub_Check_,new Date(),false));
             taskAdapter.notifyDataSetChanged();
             GetTask();
             dialog.dismiss();
@@ -185,21 +192,6 @@ public class TaskFragment extends Fragment {
         binding.dateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                switch (position){
-//                    case 0:
-//                        Toast.makeText(getContext(), "0", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 1:
-//                        Toast.makeText(getContext(), "1", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 2:
-//                        Toast.makeText(getContext(), "2", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 3:
-//                        Toast.makeText(getContext(), "3", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -212,6 +204,8 @@ public class TaskFragment extends Fragment {
         binding.dateSpinner.setAdapter(dataAdapter);
     }
     private void CategorySetData() {
+        /* new is :->
+                    sync data hear from cloud soon */
         CategoryDatabaseHelper categoryDatabaseHelper = CategoryDatabaseHelper.getDB(getContext());
         if(categoryDatabaseHelper.categoryModelDAO().getAllCategory().isEmpty()) {
             categoryDatabaseHelper.categoryModelDAO().insertAll(new CategoryModel("No Category"));
@@ -220,6 +214,31 @@ public class TaskFragment extends Fragment {
             categoryDatabaseHelper.categoryModelDAO().insertAll(new CategoryModel("Wishlist"));
             categoryDatabaseHelper.categoryModelDAO().insertAll(new CategoryModel("Birthday"));
             categoryDatabaseHelper.categoryModelDAO().insertAll(new CategoryModel("Add Category"));
+
+//             user Open app first time
+
+//            first_time_sync_data_box
+            FirstTimeSyncDataBoxBinding firstTimeSyncDataBoxBinding;
+            firstTimeSyncDataBoxBinding = FirstTimeSyncDataBoxBinding.inflate(getLayoutInflater());
+            Dialog dialog = new Dialog(getContext());
+            dialog.setContentView(firstTimeSyncDataBoxBinding.getRoot());
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.newcategoryboxbg);
+            dialog.setCancelable(false);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.CategorySpinnerAnimation;
+
+            firstTimeSyncDataBoxBinding.cancel.setOnClickListener(cancel-> dialog.dismiss());
+            firstTimeSyncDataBoxBinding.save.setOnClickListener(save->{
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        Intent intent = new Intent(getContext(), AuthMangerActivity.class);
+                        intent.putExtra(keys.GO_TO,"sync");
+                        startActivity(intent);
+                    }else {
+                    Toast.makeText(requireContext(), "some things was worry", Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            });
+            dialog.show();
         }
     }
     private void ShowAddCategoryBox() {
@@ -276,15 +295,26 @@ public class TaskFragment extends Fragment {
     }
     @SuppressLint("NotifyDataSetChanged")
     private void GetTask(){
-//        binding.TaskList.set
+//        List<TaskModel> listTasks = new ArrayList<>();
+//        listAdapter = new TaskListAdapter(getContext(), R.layout.task_layout, listTasks,this);
+//        binding.listViewTasks.setAdapter(listAdapter);
+        //        binding.TaskList.set
         TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
         ArrayList<TaskModel> taskModels = new ArrayList<>();
-        taskAdapter = new TaskAdapter(taskModels, getContext());
+        taskAdapter = new TaskAdapter(taskModels, this  ,getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.TaskList.setLayoutManager(layoutManager);
         binding.TaskList.setAdapter(taskAdapter);
-        taskModels.addAll(taskDatabaseHelper.taskModelDAO().getAllTaskModel());
+        if (taskDatabaseHelper.taskModelDAO().getAllTaskModel().isEmpty()) {
+            Toast.makeText(getContext(), "Enty", Toast.LENGTH_SHORT).show();
+        }else {
+            taskModels.addAll(taskDatabaseHelper.taskModelDAO().getAllTaskModel());
+            taskModels.sort(new PinnedComparator());
+        }
+//        Collections c = ));
+
+
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -292,6 +322,33 @@ public class TaskFragment extends Fragment {
     public void onResume() {
         GetTask();
         super.onResume();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onBtnClickPin(TaskModel taskModel, boolean change) {
+        TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
+        taskModel.setPin(change);
+        taskDatabaseHelper.taskModelDAO().UpdateTaskModel(taskModel);
+        taskAdapter.notifyDataSetChanged();
+//        listAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onBtnClickDelete(TaskModel taskModel) {
+        TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
+        taskDatabaseHelper.taskModelDAO().deleteTaskModel(taskModel);
+        taskAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onBtnClickCheckBox(TaskModel taskModel, boolean IsCheck) {
+        TaskDatabaseHelper taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(getContext());
+        taskModel.setTaskCheck(IsCheck);
+        taskDatabaseHelper.taskModelDAO().UpdateTaskModel(taskModel);
+        taskAdapter.notifyDataSetChanged();
     }
 
 }

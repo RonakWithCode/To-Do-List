@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "596592902155",
+    "firebase_url": "https://to-do-list-e7d37-default-rtdb.firebaseio.com",
+    "project_id": "to-do-list-e7d37",
+    "storage_bucket": "to-do-list-e7d37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596592902155:android:e2a858c4bfc196b9fc470e",
+        "android_client_info": {
+          "package_name": "com.crazyostudio.to_do_list"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz3rAZLjoh6re9jEbTPsNMsMqfmFbTBE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,6 +15,11 @@ public interface TaskModelDAO
 {
     @Query("select * from Task_Model")
     List<TaskModel> getAllTaskModel();
+
+    @Query("select * from Task_Model where id= :id")
+    TaskModel getAllTaskModelById(int id);
+
+    //    User getUserById(Long id);
     @Insert
     void insertTaskModel(TaskModel users);
     @Update
@@ -22,4 +27,5 @@ public interface TaskModelDAO
 
     @Delete
     void deleteTaskModel(TaskModel user);
+
 }
