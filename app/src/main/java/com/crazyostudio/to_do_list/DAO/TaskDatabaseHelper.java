@@ -11,7 +11,7 @@ import com.crazyostudio.to_do_list.Converters.ArrayListConverters;
 import com.crazyostudio.to_do_list.Model.TaskModel;
 
 @Database(entities = TaskModel.class,exportSchema = false ,version = 1)
-@TypeConverters({ArrayListConverters.class})
+@TypeConverters(ArrayListConverters.class)
 
 public abstract class TaskDatabaseHelper extends RoomDatabase {
 

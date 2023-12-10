@@ -5,10 +5,13 @@ import androidx.room.TypeConverter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
 public class ArrayListConverters {
     @TypeConverter
     public static ArrayList<Boolean> fromBooleanString(String value) {
+        if (value == null || value.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         ArrayList<Boolean> list = new ArrayList<>();
         String[] elements = value.split(",");
         for (String element : elements) {
@@ -19,6 +22,10 @@ public class ArrayListConverters {
 
     @TypeConverter
     public static String toBooleanString(ArrayList<Boolean> list) {
+        if (list == null || list.isEmpty()) {
+            return "";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         for (Boolean element : list) {
             stringBuilder.append(element).append(",");
@@ -31,6 +38,10 @@ public class ArrayListConverters {
 
     @TypeConverter
     public static ArrayList<String> fromStringList(String value) {
+        if (value == null || value.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         ArrayList<String> list = new ArrayList<>();
         String[] elements = value.split(",");
         Collections.addAll(list, elements);
@@ -39,6 +50,10 @@ public class ArrayListConverters {
 
     @TypeConverter
     public static String toStringList(ArrayList<String> list) {
+        if (list == null || list.isEmpty()) {
+            return "";
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         for (String element : list) {
             stringBuilder.append(element).append(",");
@@ -49,7 +64,6 @@ public class ArrayListConverters {
         return stringBuilder.toString();
     }
 
-
     @TypeConverter
     public static Date fromTimestamp(Long value) {
         return value == null ? null : new Date(value);
@@ -59,6 +73,4 @@ public class ArrayListConverters {
     public static Long dateToTimestamp(Date date) {
         return date == null ? null : date.getTime();
     }
-
-
 }

@@ -32,7 +32,7 @@
     <!--    Create a new Task -->
     <color name="TaskTextColor">#ffff</color>
     <color name="newTaskSaveTextColor">#94abdc</color>
-    <color name="newTaskCancelTextColor">#ccdcf6</color>
+        <color name="newTaskCancelTextColor">#ccdcf6</color>
 
     <!--    Create a TaskDetails Screen -->
     <color name="TaskDetails_Add_TextView">#a6badd</color>

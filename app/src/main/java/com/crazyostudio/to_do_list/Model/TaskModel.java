@@ -29,6 +29,12 @@ public class TaskModel {
     Date Date;
     @ColumnInfo(name = "Pin")
     private boolean Pin;
+    @ColumnInfo(name = "imageBytes")
+    public ArrayList<String> imageBytes;
+//    public ArrayList<byte[]> byteArrayList;
+
+
+
 
     public TaskModel(){}
     public TaskModel(int id, String task, String notes, String category, Boolean taskCheck, ArrayList<String> sub_Task, ArrayList<Boolean> sub_check,Date date,Boolean pin) {
@@ -115,5 +121,13 @@ public class TaskModel {
     }
     public void setCategory(String category) {
         Category = category;
+    }
+
+    public ArrayList<String> getImageBytes() {
+        return imageBytes;
+    }
+
+    public void setImageBytes(ArrayList<String> imageBytes) {
+        this.imageBytes = imageBytes;
     }
 }

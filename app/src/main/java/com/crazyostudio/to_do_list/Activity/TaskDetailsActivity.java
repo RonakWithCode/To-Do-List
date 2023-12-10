@@ -4,26 +4,32 @@ package com.crazyostudio.to_do_list.Activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,7 +52,12 @@ import com.crazyostudio.to_do_list.databinding.TimeorreminderboxBinding;
 import com.crazyostudio.to_do_list.interface_class.ImageAttachmentClick;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +68,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
     private static final int ONEIMAGE = 1;
     private static final int DOCUMENTED = 2;
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 500;
+//    private static final int REQUEST_PERMISSIONS = 501;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 501;
 
+    private ArrayList<String> imagePaths;
 
 
     ActivityTaskDetailsBinding binding;
@@ -70,7 +84,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
     Task_Sub_Adapter task_sub_adapter;
     ArrayList<Task_Sub_Model> task_sub_models;
     TaskDatabaseHelper taskDatabaseHelper;
-    ArrayList<Uri> images;
+    ArrayList<String> images;
     ImageAttachmentAdapter imageAdapters;
 
 
@@ -83,6 +97,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
         setContentView(binding.getRoot());
 //      get Data from room database      \\
         taskDatabaseHelper = TaskDatabaseHelper.TasGetDB(this);
+        imagePaths = new ArrayList<>();
         id = Integer.parseInt(getIntent().getStringExtra("index"));
         images = new ArrayList<>();
         SetupImageRecyclerView();
@@ -93,6 +108,13 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
         });
         binding.dueDate.setOnClickListener(view -> ShowDueDate());
         getSubTask();
+
+        if (!taskDatabaseHelper.taskModelDAO().getAllTaskModelById(id).getImageBytes().isEmpty()) {
+
+            images.addAll(taskDatabaseHelper.taskModelDAO().getAllTaskModelById(id).getImageBytes());
+        }
+
+
         binding.TaskTitle.setText(taskDatabaseHelper.taskModelDAO().getAllTaskModelById(id).getTask());
         binding.TaskCheck.setChecked(taskDatabaseHelper.taskModelDAO().getAllTaskModelById(id).getTaskCheck());
         binding.TaskNotes.setText(taskDatabaseHelper.taskModelDAO().getAllTaskModelById(id).getNotes());
@@ -134,12 +156,21 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         PERMISSION_REQUEST_READ_EXTERNAL_STORAGE);
-            } else {
+            }
+            else {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it from the user
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_WRITE_EXTERNAL_STORAGE);
+                }else {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(Intent.createChooser(intent, "Select Pictures"), DOCUMENTED);
+                }
                 // Permission is already granted; you can proceed with the intent
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(Intent.createChooser(intent, "Select Pictures"), DOCUMENTED);
+
             }
             dialog.dismiss();
         });
@@ -291,40 +322,71 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
 
     private void changingData() {
 //        AlarmUtils alarmUtils = new AlarmUtils();
-        ArrayList<byte[]> arrayListImage = new ArrayList<>();
+//        ArrayList<Uri> uriList = arrayListImage;`
+//        UriListWithContext uriListWithContext = new UriListWithContext(images, this);
+//
+//        byte[] byteArrayList = ByteArrayListConverter.fromUriListWithContext(uriListWithContext);
+//        ArrayList<Uri> uriList = /* Your ArrayList of Uri */;
+//        byte[] byteData = Converters.fromUriList(uriList);
+//        MyEntity myEntity = new MyEntity();
+//        myEntity.imageBytes = byteData;
+//        myDatabase.myDao().insert(myEntity);
+
+//        MyEntity myEntity = new MyEntity();
+//        myEntity.byteArrayList = byteArrayList;
+//        myDatabase.myDao().insert(myEntity);
+
+// Retrieve data from the database
+//        MyEntity retrievedEntity = myDatabase.myDao().getEntityById(id);
+//        ArrayList<byte[]> retrievedByteArrayList = retrievedEntity.byteArrayList;
+//        ArrayList<Uri> retrievedUriList = Converters.toUriList(retrievedByteArrayList);
+//
+//
+
+        Log.i("images_SIZE", "changingData: "+images.size());
         for (int i = 0; i < images.size(); i++) {
-            Bitmap bitmap = BitmapFactory.decodeFile(String.valueOf(images.get(i)));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
-            byte[] imageBytes = outputStream.toByteArray();
-            arrayListImage.add(imageBytes);
+            String imagePath = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                imagePath = saveImageToExternalStorage(Uri.parse(images.get(i)));
+                imagePaths.add(imagePath);
+            }
         }
 
 
-        ArrayList<String> sub_task_String = new ArrayList<>();
-        ArrayList<Boolean> sub_task_Check = new ArrayList<>();
-        for (int i = 0; i < task_sub_models.size(); i++) {
-            sub_task_String.add(task_sub_models.get(i).getSub_task());
-            sub_task_Check.add(task_sub_models.get(i).isTrue());
-        }
-        TaskModel taskModel = new TaskModel();
-        taskModel.setId(id);
-        taskModel.setTask(binding.TaskTitle.getText().toString());
-        taskModel.setNotes(binding.TaskNotes.getText().toString());
-        taskModel.setCategory(binding.TaskDetailsCategorySpinner.getSelectedItem().toString());
-        taskModel.setTaskCheck(binding.TaskCheck.isChecked());
-        taskModel.setSub_Task(sub_task_String);
-        taskModel.setSub_check(sub_task_Check);
+
+
+            ArrayList<String> sub_task_String = new ArrayList<>();
+            ArrayList<Boolean> sub_task_Check = new ArrayList<>();
+            for (int i = 0; i < task_sub_models.size(); i++) {
+                sub_task_String.add(task_sub_models.get(i).getSub_task());
+                sub_task_Check.add(task_sub_models.get(i).isTrue());
+            }
+            TaskModel taskModel = new TaskModel();
+            taskModel.setId(id);
+            taskModel.setTask(binding.TaskTitle.getText().toString());
+            taskModel.setNotes(binding.TaskNotes.getText().toString());
+            taskModel.setCategory(binding.TaskDetailsCategorySpinner.getSelectedItem().toString());
+            taskModel.setTaskCheck(binding.TaskCheck.isChecked());
+            taskModel.setSub_Task(sub_task_String);
+            taskModel.setSub_check(sub_task_Check);
+            taskModel.setImageBytes(imagePaths);
+//        for (Uri imageUri : images) {
+////            byte[] imageBytes = convertUriToByteArray(imageUri);
+//            byte[] imageBytes = convertUriToByteArray(imageUri, getContentResolver());
+//            if (imageBytes != null) {
+//                taskModel.imageBytes = imageBytes;
+//            }
+
+//        }
 //        taskModel.setImageData(arrayListImage);
-        if (mDate==null) {
-            mDate = new Date();
-            Toast.makeText(this, "Fall Change Date Now we set data as"+ mDate, Toast.LENGTH_SHORT).show();
+            if (mDate == null) {
+                mDate = new Date();
+                Toast.makeText(this, "Fall to Change Date Now we set data as" + mDate, Toast.LENGTH_SHORT).show();
+            }
+            taskModel.setDate(mDate);
+            taskDatabaseHelper.taskModelDAO().UpdateTaskModel(taskModel);
+            finish();
         }
-        taskModel.setDate(mDate);
-        taskDatabaseHelper.taskModelDAO().UpdateTaskModel(taskModel);
-        finish();
-    }
-
     public static void setAlarm(Context context, int alarmId, long triggerTimeInMillis, String alarmName) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -349,6 +411,28 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
 
 //        Service.startForeground();
     }
+    private void showPermissionDeniedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Permission Denied");
+        builder.setMessage("This app needs storage permission to function properly.");
+
+        builder.setPositiveButton("Open Settings", (dialog, which) -> {
+            // Open the app's settings
+            openAppSettings();
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Handle the user's choice, e.g., show an error message
+        });
+
+        builder.show();
+    }
+    private void openAppSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
+    }
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -361,26 +445,25 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
                     int count = data.getClipData().getItemCount();
                     for (int i = 0; i < count; i++) {
                         Uri fileUri = data.getClipData().getItemAt(i).getUri();
-                        images.add(fileUri);
+                        images.add(String.valueOf(fileUri));
                         imageAdapters.notifyDataSetChanged();
                     }
                 }
                 else if (data.getData() != null) {
                     // Single file selected
                     Uri fileUri = data.getData();
-                    images.add(fileUri);
+                    images.add(String.valueOf(fileUri));
                     imageAdapters.notifyDataSetChanged();
 
                 }
             }
         }
         else if (requestCode==ONEIMAGE&& resultCode == RESULT_OK && data!=null){
-            images.add(data.getData());
+            images.add(String.valueOf(data.getData()));
             imageAdapters.notifyDataSetChanged();
 
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -412,12 +495,153 @@ public class TaskDetailsActivity extends AppCompatActivity implements ImageAttac
             }
         }
 
+        else if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, you can proceed with file operations
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message to the user)
+                showPermissionDeniedDialog();
+
+            }
+        }
     }
 
+
+
+
+
+
+
+
+
+//    private String saveImageToExternalStorage(Uri fileUri) {
+//        try {
+//            if (fileUri == null) {
+//                // Handle the case where the URI is null
+//                return null;
+//            }
+//
+//            File directory = new File(Environment.getExternalStoragePublicDirectory(
+//                    Environment.DIRECTORY_PICTURES), "Attachment");
+//
+//            if (!directory.exists() && !directory.mkdirs()) {
+//                // Handle the case where directory creation fails
+//                return null;
+//            }
+//            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+//
+//            String fileName = "attachment" + System.currentTimeMillis() + fileExtension;
+//            File outputFile = new File(directory, fileName);
+//
+//            InputStream inputStream = getContentResolver().openInputStream(fileUri);
+//            FileOutputStream outputStream = new FileOutputStream(outputFile);
+//
+//            byte[] buffer = new byte[1024];
+//            int length;
+//            while ((length = inputStream.read(buffer)) > 0) {
+//                outputStream.write(buffer, 0, length);
+//            }
+//
+//            inputStream.close();
+//            outputStream.close();
+//
+//            return outputFile.getAbsolutePath();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            // Handle the File Not Found error here
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            // Handle other IO-related errors here
+//        }
+//        return null; // Return null to indicate an error
+//    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private String saveImageToExternalStorage(Uri fileUri) {
+        try {
+            if (fileUri == null) {
+                // Handle the case where the URI is null
+                return null;
+            }
+            String fileExtension =getFileExtensionFromUri(fileUri);
+            Log.i("fileExtension+++))", "saveImageToExternalStorage: "+fileExtension);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, "attachment" + System.currentTimeMillis() + "."+fileExtension);
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Attachment");
+
+            Uri imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+            if (imageUri == null) {
+                // Handle the case where the image couldn't be inserted
+                return null;
+            }
+
+            OutputStream outputStream = getContentResolver().openOutputStream(imageUri);
+
+            if (outputStream == null) {
+                // Handle the case where the output stream is null
+                return null;
+            }
+
+            InputStream inputStream = getContentResolver().openInputStream(fileUri);
+
+            if (inputStream == null) {
+                // Handle the case where the input stream is null
+                return null;
+            }
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            return imageUri.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle other IO-related errors here
+        }
+        return null; // Return null to indicate an error
+    }
+
+    private String getFileExtensionFromUri(Uri fileUri) {
+        if (fileUri == null) {
+            // Handle the case where the URI is null
+            return null;
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        String fileExtension = null;
+
+        // Check if the URI is a content URI
+        if (ContentResolver.SCHEME_CONTENT.equals(fileUri.getScheme())) {
+            fileExtension = mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(fileUri));
+        }
+
+        // If the extension is still null, try to extract it from the file path
+        if (fileExtension == null) {
+            String filePath = fileUri.getPath();
+            if (filePath != null) {
+                fileExtension = MimeTypeMap.getFileExtensionFromUrl(filePath);
+            }
+        }
+
+        return fileExtension;
+    }
     @Override
     public void remove(int pos) {
         images.remove(pos);
         imageAdapters.notifyItemRemoved(pos);
 
     }
+
+
+
 }

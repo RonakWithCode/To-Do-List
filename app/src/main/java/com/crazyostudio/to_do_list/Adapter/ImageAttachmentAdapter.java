@@ -17,11 +17,11 @@ import com.crazyostudio.to_do_list.interface_class.ImageAttachmentClick;
 import java.util.ArrayList;
 
 public class ImageAttachmentAdapter extends RecyclerView.Adapter<ImageAttachmentAdapter.ImageAttachmentAdapterViewHolder>{
-    ArrayList<Uri> uris;
+    ArrayList<String> uris;
     Context context;
     ImageAttachmentClick click;
 
-    public ImageAttachmentAdapter(ArrayList<Uri> uris, Context context, ImageAttachmentClick click) {
+    public ImageAttachmentAdapter(ArrayList<String> uris, Context context, ImageAttachmentClick click) {
         this.uris = uris;
         this.context = context;
         this.click = click;
@@ -36,7 +36,7 @@ public class ImageAttachmentAdapter extends RecyclerView.Adapter<ImageAttachment
 
     @Override
     public void onBindViewHolder(@NonNull ImageAttachmentAdapter.ImageAttachmentAdapterViewHolder holder, int position) {
-        Uri image = uris.get(position);
+        String image = uris.get(position);
         Glide.with(context).load(image).placeholder(R.drawable.loading).into(holder.binding.Attachment);
 //        holder.binding.Attachment.setImageURI(image);
         holder.binding.removeImage.setOnClickListener(remove-> click.remove(position));
